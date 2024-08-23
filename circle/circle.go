@@ -56,6 +56,13 @@ func (c Circle) InstersectsLineSegment(ls line.LineSegment) bool {
 		return true
 	}
 	// if neither are inside, find closest point on line (not segment) and check this
+	return c.intersectsLineSegmentByCheckingClosestPoint(ls)
+
+}
+
+// intersectsLineSegmentByCheckingClosestPoint - find closest point on line segment to the circle and then check
+// whether the closest point satisfies line intersecting circle
+func (c Circle) intersectsLineSegmentByCheckingClosestPoint(ls line.LineSegment) bool {
 	length := ls.Length()
 	dotProduct := (((c.centre.X-ls.Start.X)*(ls.End.X-ls.Start.X) + (c.centre.Y-ls.Start.Y)*(ls.End.Y-ls.Start.Y)) / (length * length))
 
@@ -71,5 +78,4 @@ func (c Circle) InstersectsLineSegment(ls line.LineSegment) bool {
 
 	// if at this point, then check if closest point is on line segment
 	return ls.HasPoint(closestPoint)
-
 }

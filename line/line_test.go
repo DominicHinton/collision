@@ -76,3 +76,35 @@ func TestHasPoint(t *testing.T) {
 	ok = ls.HasPoint(p)
 	assert.False(t, ok, "point should be on line")
 }
+
+// TestIntersectsLineSegment - test for correct function of IntersectsLineSegment
+func TestIntersectsLineSegment(t *testing.T) {
+	// check that a line intersecting with itself will return line.Start and true
+	ls1 := LineSegment{Start: point.Point{X: 0, Y: 0}, End: point.Point{X: 10, Y: 10}}
+	intersectionPoint, ok := ls1.IntersectsLineSegment(ls1)
+	assert.True(t, ok)
+	expectedPoint := point.Point{X: 0, Y: 0}
+	assert.Equal(t, expectedPoint, intersectionPoint, "lines should intersect at (0,0)")
+
+	// check an obvious intersection
+	ls2 := LineSegment{Start: point.Point{X: 0, Y: 1}, End: point.Point{X: 1, Y: 0}}
+	intersectionPoint, ok = ls1.IntersectsLineSegment(ls2)
+	assert.True(t, ok)
+	expectedPoint = point.Point{X: 0.5, Y: 0.5}
+	assert.Equal(t, expectedPoint, intersectionPoint, "lines should intersect at (0.5, 0.5)")
+
+	// two parallel line segments with no intersection
+	ls2 = LineSegment{Start: point.Point{X: 0, Y: 1}, End: point.Point{X: 10, Y: 11}}
+	intersectionPoint, ok = ls1.IntersectsLineSegment(ls2)
+	assert.False(t, ok)
+	expectedPoint = point.Point{X: 0, Y: 0}
+	assert.Equal(t, expectedPoint, intersectionPoint, "lines should not intersect")
+
+	// two non-parallel lines with no intersection
+	ls2 = LineSegment{Start: point.Point{X: -6, Y: -9}, End: point.Point{X: -2, Y: -10}}
+	intersectionPoint, ok = ls1.IntersectsLineSegment(ls2)
+	assert.False(t, ok)
+	expectedPoint = point.Point{X: 0, Y: 0}
+	assert.Equal(t, expectedPoint, intersectionPoint, "lines should not intersect")
+
+}

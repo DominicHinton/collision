@@ -1,6 +1,9 @@
 package point
 
-import "math"
+import (
+	"errors"
+	"math"
+)
 
 // Point - represents a point in 2D space
 type Point struct {
@@ -38,4 +41,32 @@ func (A Point) Distance(B Point) float32 {
 	xDistance := float64(A.XDistance(B))
 	yDistance := float64(A.YDistance(B))
 	return float32(math.Sqrt((xDistance * xDistance) + (yDistance * yDistance)))
+}
+
+// GetMinMax - return maximum and minimum x and y values from an array of points
+func GetMinMax(points []Point) (minX, maxX, minY, maxY float32, err error) {
+	if len(points) == 0 {
+		err = errors.New("empty array of points cannot result in minimum and maximum values")
+		return
+	}
+	// instantiate min and max values from first entry in array
+	minX, maxX = points[0].X, points[0].X
+	minY, maxY = points[0].Y, points[0].Y
+	// loop through remaining points
+	for i := 1; i < len(points); i++ {
+		p := points[i]
+		// set min or max X if necessary
+		if p.X < minX {
+			minX = p.X
+		} else if p.X > maxX {
+			maxX = p.X
+		}
+		// set min or max Y if necessary
+		if p.Y < minY {
+			minY = p.Y
+		} else if p.Y > maxY {
+			maxY = p.Y
+		}
+	}
+	return
 }
